@@ -1,13 +1,14 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class Main {
@@ -56,21 +57,50 @@ public class Main {
 
     private static void handleClient(final Socket clientSocket) {
 
-        try (BufferedReader inputStreamReader = new BufferedReader(
-                new InputStreamReader(clientSocket.getInputStream()));
+        try (BufferedReader inputStreamReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 OutputStream outputStream = clientSocket.getOutputStream();) {
 
-            String[] arg = inputStreamReader.readLine().split(" ");
-            System.out.println(Arrays.toString(arg));
+            
+            String[] arg = inputStreamReader.readLine().split(" ");;
 
             String httpResponse;
+            if(arg[0].equals("POST") && arg[1].contains("/files/")){
+                String filePath = directory + arg[1].substring(7);
+                
 
-            if (arg[1].equals("/")) { // 200 OK
+                try {
+                    File file = new File(filePath);
+                    FileWriter fileWriter = new FileWriter(file);
+                    BufferedWriter writer = new BufferedWriter(fileWriter);
+
+                    String line;
+                    while ((line = inputStreamReader.readLine()) != null) {
+                        if (line.isEmpty()) {
+                            break;
+                        }
+                    }
+
+                    while ((line = inputStreamReader.readLine()) != null) {
+                        writer.write(line);
+                        writer.newLine();
+                    }
+                    
+                    writer.close();
+                    fileWriter.close();
+                    httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
+                } catch (Exception e) {
+                    System.out.println("Exception in file writing: " + e.getMessage());
+                    httpResponse = "HTTP/1.1 404 BAD\r\n\r\n";
+                }
+
+
+            }
+            else if (arg[1].equals("/")) { // 200 OK
                 httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
             } else if (arg[1].contains("/echo/")) { // echo
                 String echoString = arg[1].substring(6);
 
-                httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(echoString,"text/plain");
+                httpResponse = ResponseString(echoString,"text/plain", 200);
                 System.out.println("httpResponse: " + httpResponse);
             }
             // user-agent
@@ -88,7 +118,7 @@ public class Main {
                     }
                 }
 
-                httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(userAgentString,"text/plain");
+                httpResponse = ResponseString(userAgentString,"text/plain", 200);
                 System.out.println("httpResponse: " + httpResponse);
             } 
             else if(arg[1].contains("/files/")){
@@ -109,7 +139,7 @@ public class Main {
                         System.err.println("IOException in file reading: " + e.getMessage());
                     }
 
-                    httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(fileContent.toString(),"application/octet-stream");
+                    httpResponse = ResponseString(fileContent.toString(),"application/octet-stream", 200);
                 }
                 else{
                     httpResponse = "HTTP/1.1 404 BAD\r\n\r\n";
@@ -125,7 +155,12 @@ public class Main {
             System.err.println("IOException in client handler: " + e.getMessage());
         }
     }
-    private static String bodyResponseString(final String bodyData, final String contentType) {
-        return "Content-Type: "+ contentType + CRLF + "Content-Length: " + bodyData.length() + CRLF + CRLF + bodyData + CRLF + CRLF;
+    private static String ResponseString(final String bodyData, final String contentType, int responseCode) {
+
+        String codeDescString = responseCode == 404 ? "BAD" : "OK";
+
+        String httpResponse = "HTTP/1.1 " + responseCode + " " + codeDescString + CRLF;
+
+        return httpResponse + "Content-Type: "+ contentType + CRLF + "Content-Length: " + bodyData.length() + CRLF + CRLF + bodyData + CRLF + CRLF;
     }
 }
