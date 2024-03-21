@@ -44,7 +44,7 @@ public class Main {
             String echoString = arg[1].substring(6);
             String contentTypeString = "Content-Type: text/plain\r\n\r\n";
             String contentLengthString = "Content-Length: " + echoString.length() + "\r\n\r\n";
-            httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + contentTypeString + contentLengthString + "\r\n\r\n" + echoString + "\r\n\r\n";
+            httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + contentTypeString + contentLengthString + echoString + "\r\n\r\n";
           }
           else {
             httpResponse = "HTTP/1.1 404 BAD\r\n\r\n";
