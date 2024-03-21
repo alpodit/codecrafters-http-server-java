@@ -74,8 +74,14 @@ public class Main {
 
                     FileWriter writer = new FileWriter(file);
                     // İstek vücut kısmını oku
+
+
                     StringBuilder requestBody = new StringBuilder();
+
                     String line;
+
+                    inputStreamReader.readLine();
+
                     while ((line = inputStreamReader.readLine()) != null && !line.isEmpty()) {
                         requestBody.append(line).append("\r\n");
                     }
@@ -85,7 +91,7 @@ public class Main {
 
                     writer.write(bodyContent);
                     writer.close();
-                    
+
 
                     httpResponse = "HTTP/1.1 201 OK\r\n\r\n";
                 }
