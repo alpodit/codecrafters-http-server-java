@@ -85,7 +85,7 @@ public class Main {
                         System.out.println(line);
                     }
 
-                    String bodyContent = requestBody.toString().substring(requestBody.toString().indexOf("\r\n\r\n") + 4);
+                    String bodyContent = requestBody.toString();
 
                     writer.write(bodyContent);
                     writer.close();
