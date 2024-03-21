@@ -1,6 +1,11 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class Main {
   private static final String CRLF = "\r\n";
@@ -27,19 +32,24 @@ public class Main {
     }
   }
   private static void handleClient(final Socket clientSocket) {
-    try (var outputStream = clientSocket.getOutputStream()) {
-      outputStream.write(encodeHttpResponse("HTTP/1.1 200 OK"));
-      outputStream.flush();
-    } catch (IOException e) {
-      System.err.println("IOException in client handler: " + e.getMessage());
 
-    }
-  }
-  private static byte[] encodeHttpResponse(String value) {
-    if (value == null) {
-      return String.format("-1%s%s", CRLF, CRLF).getBytes();
-    }
+    try (BufferedReader inputStreamReader = new BufferedReader(
+                 new InputStreamReader(clientSocket.getInputStream()));
+             OutputStream outputStream = clientSocket.getOutputStream();) {
+          String[] arg = inputStreamReader.readLine().split(" ");
+          System.out.println(Arrays.toString(arg));
+          String httpResponse;
+          if (arg[1].equals("/")) {
+            httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
+          } else {
+            httpResponse = "HTTP/1.1 404 BAD\r\n\r\n";
+          }
+          outputStream.write(httpResponse.getBytes(StandardCharsets.UTF_8));
+          outputStream.flush();
 
-    return String.format("%s%s%s", value, CRLF, CRLF).getBytes();
+        }
+        catch(IOException e){
+          System.err.println("IOException in client handler: " + e.getMessage());
+        }
   }
 }
