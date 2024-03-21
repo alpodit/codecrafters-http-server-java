@@ -81,15 +81,15 @@ public class Main {
                     String line;
 
                     while ((line = inputStreamReader.readLine()) != null && !line.isEmpty()) {
-                        requestBody.append(line).append("\r\n");
                         System.out.println(line);
                     }
                     
 
-                    
-                    char bodyContent = ((char)inputStreamReader.read());
-                    System.out.println("bodyContent: " + bodyContent);
-                    writer.write(bodyContent);
+                    while (inputStreamReader.ready()) {
+                        requestBody.append((char) inputStreamReader.read());
+                    }
+                    System.out.println("bodyContent: " + requestBody.toString());
+                    writer.write(requestBody.toString();
                     writer.close();
 
 
