@@ -71,20 +71,20 @@ public class Main {
                     httpResponse = "HTTP/1.1 400 BAD\r\n\r\n";
                 }
                 else{
-                    try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
+                    try(FileWriter writer = new FileWriter(file)){
                         String line;
                         while ((line = inputStreamReader.readLine()) != null) {
                             System.out.println("test1");
                             System.out.println("line: " + line);
                             if (line.isEmpty()) {
-                                break; // Başlık alanları bittiğinde döngüyü sonlandır
+                                break;
                             }
                         }
-                        while ((line = inputStreamReader.readLine()) != null) {
-                            System.out.println(("test2"));
-                            System.out.println("line: " + line);
-                            writer.write(line);
-                        }
+                        System.out.println("test3");
+                        line = inputStreamReader.readLine();
+                        System.out.println(("test2"));
+                        System.out.println("line: " + line);
+                        writer.write(line);
                     }catch(IOException e){
                         System.err.println("IOException in file writing: " + e.getMessage());
                     }
