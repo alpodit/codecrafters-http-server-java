@@ -61,39 +61,32 @@ public class Main {
                 OutputStream outputStream = clientSocket.getOutputStream();) {
 
             
-            String[] arg = inputStreamReader.readLine().split(" ");;
+            String[] arg = inputStreamReader.readLine().split(" ");
 
             String httpResponse;
             if(arg[0].equals("POST") && arg[1].contains("/files/")){
                 String filePath = directory + arg[1].substring(7);
-                
-
-                try {
-                    File file = new File(filePath);
-                    FileWriter fileWriter = new FileWriter(file);
-                    BufferedWriter writer = new BufferedWriter(fileWriter);
-
-                    String line;
-                    while ((line = inputStreamReader.readLine()) != null) {
-                        if (line.isEmpty()) {
-                            break;
-                        }
-                    }
-
-                    while ((line = inputStreamReader.readLine()) != null) {
-                        writer.write(line);
-                        writer.newLine();
-                    }
-
-                    writer.close();
-                    fileWriter.close();
-                    httpResponse = "HTTP/1.1 201 OK\r\n\r\n";
-                } catch (Exception e) {
-                    System.out.println("Exception in file writing: " + e.getMessage());
-                    httpResponse = "HTTP/1.1 404 BAD\r\n\r\n";
+                File file = new File(filePath);
+                if(file.exists()){
+                    httpResponse = "HTTP/1.1 400 BAD\r\n\r\n";
                 }
-
-
+                else{
+                    try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
+                        String line;
+                        while ((line = inputStreamReader.readLine()) != null) {
+                            if (line.isEmpty()) {
+                                break; // Başlık alanları bittiğinde döngüyü sonlandır
+                            }
+                        }
+                        while ((line = inputStreamReader.readLine()) != null) {
+                            writer.write(line);
+                            writer.newLine();
+                        }
+                    }catch(IOException e){
+                        System.err.println("IOException in file writing: " + e.getMessage());
+                    }
+                    httpResponse = "HTTP/1.1 201 OK\r\n\r\n";
+                }
             }
             else if (arg[1].equals("/")) { // 200 OK
                 httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
