@@ -71,34 +71,21 @@ public class Main {
                     httpResponse = "HTTP/1.1 400 BAD\r\n\r\n";
                 }
                 else{
-                    // try(FileWriter writer = new FileWriter(file)){
-                    //     String line;
-                    //     while ((line = inputStreamReader.readLine()) != null) {
-                    //         System.out.println("test1");
-                    //         System.out.println("line: " + line);
-                    //         if (line.isEmpty()) {
-                    //             break;
-                    //         }
-                    //     }
-                    //     System.out.println("test3");
-                    //     line = inputStreamReader.readLine();
-                    //     System.out.println(("test2"));
-                    //     System.out.println("line: " + line);
-                    //     writer.write(line);
-                    // }catch(IOException e){
-                    //     System.err.println("IOException in file writing: " + e.getMessage());
-                    // }
 
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                    FileWriter writer = new FileWriter(file);
+                    // İstek vücut kısmını oku
+                    StringBuilder requestBody = new StringBuilder();
                     String line;
-                    while ((line = inputStreamReader.readLine()) != null) {
-                        if (line.isEmpty()) {
-                            break;
-                        }
+                    while ((line = inputStreamReader.readLine()) != null && !line.isEmpty()) {
+                        requestBody.append(line).append("\r\n");
                     }
-                    line = inputStreamReader.readLine();
-                    writer.write(line);
+
+                    // POST isteğinin gövdesi
+                    String bodyContent = requestBody.toString();
+
+                    writer.write(bodyContent);
                     writer.close();
+                    
 
                     httpResponse = "HTTP/1.1 201 OK\r\n\r\n";
                 }
