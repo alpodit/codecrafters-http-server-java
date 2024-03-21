@@ -74,13 +74,14 @@ public class Main {
                     try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
                         String line;
                         while ((line = inputStreamReader.readLine()) != null) {
+                            System.out.println("line: " + line);
                             if (line.isEmpty()) {
                                 break; // Başlık alanları bittiğinde döngüyü sonlandır
                             }
                         }
                         while ((line = inputStreamReader.readLine()) != null) {
+                            System.out.println("line: " + line);
                             writer.write(line);
-                            writer.newLine();
                         }
                     }catch(IOException e){
                         System.err.println("IOException in file writing: " + e.getMessage());
