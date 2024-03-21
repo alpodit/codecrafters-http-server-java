@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class Main {
-  private static final String CRLF = "\r\n";
   public static void main(String[] args) {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
     System.out.println("Logs from your program will appear here!");
@@ -41,7 +40,13 @@ public class Main {
           String httpResponse;
           if (arg[1].equals("/")) {
             httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
-          } else {
+          } else if(arg[1].contains("/echo/")){
+            String echoString = arg[1].substring(6);
+            String contentTypeString = "Content-Type: text/plain\r\n\r\n";
+            String contentLengthString = "Content-Length: " + echoString.length() + "\r\n\r\n";
+            httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + contentTypeString + contentLengthString + "\r\n\r\n" + echoString + "\r\n\r\n";
+          }
+          else {
             httpResponse = "HTTP/1.1 404 BAD\r\n\r\n";
           }
           outputStream.write(httpResponse.getBytes(StandardCharsets.UTF_8));
