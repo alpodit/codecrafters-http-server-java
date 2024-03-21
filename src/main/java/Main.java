@@ -42,12 +42,12 @@ public class Main {
             httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
           } else if(arg[1].contains("/echo/")){
             String echoString = arg[1].substring(6);
-            String contentTypeString = "Content-Type: text/plain\r\n\r\n";
-            String contentLengthString = "Content-Length: " + echoString.length() + "\r\n\r\n";
+            String contentTypeString = "Content-Type: text/plain\r\n";
+            String contentLengthString = "Content-Length: " + echoString.length() + "\r\n";
             System.out.println("echoString: " + echoString);
             System.out.println("contentTypeString: " + contentTypeString);
             System.out.println("contentLengthString: " + contentLengthString);
-            httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + contentTypeString + contentLengthString +"\r\n\r\n"+"\r\n\r\n"+ echoString + "\r\n\r\n";
+            httpResponse = "HTTP/1.1 200 OK\r\n" + contentTypeString + contentLengthString +echoString + "\r\n\r\n";
             System.out.println("httpResponse: " + httpResponse);
           }
           else {
