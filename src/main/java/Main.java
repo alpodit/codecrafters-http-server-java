@@ -117,6 +117,6 @@ public class Main {
         }
     }
     private static String bodyResponseString(final String bodyData) {
-        return "Content-Type: text/plain" + CRLF + "Content-Length: " + bodyData.length() + CRLF + bodyData + CRLF + CRLF;
+        return "Content-Type: text/plain" + CRLF + "Content-Length: " + bodyData.length() + CRLF + CRLF + bodyData + CRLF + CRLF;
     }
 }
