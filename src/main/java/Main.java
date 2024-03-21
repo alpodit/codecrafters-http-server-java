@@ -38,9 +38,9 @@ public class Main {
           String[] arg = inputStreamReader.readLine().split(" ");
           System.out.println(Arrays.toString(arg));
           String httpResponse;
-          if (arg[1].equals("/")) {
+          if (arg[1].equals("/")) { // 200 OK
             httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
-          } else if(arg[1].contains("/echo/")){
+          } else if(arg[1].contains("/echo/")){  // echo
             String echoString = arg[1].substring(6);
             String contentTypeString = "Content-Type: text/plain\r\n";
             String contentLengthString = "Content-Length: " + echoString.length() + "\r\n";
@@ -50,7 +50,27 @@ public class Main {
             httpResponse = "HTTP/1.1 200 OK\r\n" + contentTypeString + contentLengthString +"\r\n"+echoString + "\r\n\r\n";
             System.out.println("httpResponse: " + httpResponse);
           }
-          else {
+          // user-agent
+          else if(arg[1].equals("/user-agent")){  // HTTP Request içindeki User-Agent header'ındaki bilgiyi döndürür.
+
+          String line;
+          String userAgentString = "";
+          while ((line = inputStreamReader.readLine()) != null) {
+              if (line.isEmpty()) {
+                  break; // Başlık alanları bittiğinde döngüyü sonlandır
+              }
+              // User-Agent başlığını kontrol et
+              if (line.startsWith("User-Agent:")) {
+                  userAgentString = line.substring("User-Agent:".length()).trim();
+              }
+          }
+
+          String contentTypeString = "Content-Type: text/plain\r\n";
+          String contentLengthString = "Content-Length: " + userAgentString.length() + "\r\n";
+          httpResponse = "HTTP/1.1 200 OK\r\n" + contentTypeString + contentLengthString +"\r\n"+userAgentString + "\r\n\r\n";
+          System.out.println("httpResponse: " + httpResponse);
+          }
+          else {  // 404 BAD
             httpResponse = "HTTP/1.1 404 BAD\r\n\r\n";
           }
           outputStream.write(httpResponse.getBytes(StandardCharsets.UTF_8));
