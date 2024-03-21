@@ -86,8 +86,9 @@ public class Main {
                     }
                     
 
-                    String bodyContent = inputStreamReader.read();;
-
+                    
+                    char bodyContent = ((char)inputStreamReader.read());
+                    System.out.println("bodyContent: " + bodyContent);
                     writer.write(bodyContent);
                     writer.close();
 
