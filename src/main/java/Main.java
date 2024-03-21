@@ -80,14 +80,13 @@ public class Main {
 
                     String line;
 
-                    inputStreamReader.readLine();
-
                     while ((line = inputStreamReader.readLine()) != null && !line.isEmpty()) {
                         requestBody.append(line).append("\r\n");
                     }
 
                     // POST isteğinin gövdesi
-                    String bodyContent = requestBody.toString();
+                    System.out.println("line: " + line);
+                    String bodyContent = inputStreamReader.readLine();
 
                     writer.write(bodyContent);
                     writer.close();
