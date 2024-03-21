@@ -47,7 +47,7 @@ public class Main {
             System.out.println("echoString: " + echoString);
             System.out.println("contentTypeString: " + contentTypeString);
             System.out.println("contentLengthString: " + contentLengthString);
-            httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + contentTypeString + contentLengthString + echoString + "\r\n\r\n";
+            httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + contentTypeString + contentLengthString +"\r\n\r\n"+"\r\n\r\n"+ echoString + "\r\n\r\n";
             System.out.println("httpResponse: " + httpResponse);
           }
           else {
