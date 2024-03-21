@@ -70,7 +70,7 @@ public class Main {
             } else if (arg[1].contains("/echo/")) { // echo
                 String echoString = arg[1].substring(6);
 
-                httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(echoString,"plain/text");
+                httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(echoString,"text/plain");
                 System.out.println("httpResponse: " + httpResponse);
             }
             // user-agent
@@ -88,7 +88,7 @@ public class Main {
                     }
                 }
 
-                httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(userAgentString,"plain/text");
+                httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(userAgentString,"text/plain");
                 System.out.println("httpResponse: " + httpResponse);
             } 
             else if(arg[1].contains("/files/")){
