@@ -86,6 +86,7 @@ public class Main {
 
                     // POST isteğinin gövdesi
                     System.out.println("line: " + line);
+                    inputStreamReader.readLine();
                     String bodyContent = inputStreamReader.readLine();
 
                     writer.write(bodyContent);
