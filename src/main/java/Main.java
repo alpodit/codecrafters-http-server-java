@@ -15,16 +15,25 @@ public class Main {
     // Uncomment this block to pass the first stage
     
     ServerSocket serverSocket = null;
-    Socket clientSocket = null;
     
     try {
       serverSocket = new ServerSocket(4221);
       while (true) {
         serverSocket.setReuseAddress(true);
-        clientSocket =
+
+        final Socket clientSocket =
             serverSocket.accept(); // Wait for connection from client.
         System.out.println("accepted new connection");
-        handleClient(clientSocket);
+
+        Thread thread = new Thread(() -> {
+          try {
+            handleClient(clientSocket);
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+        });
+        
+        thread.start();
       }
     } catch (IOException e) {
       System.out.println("IOException: " + e.getMessage());
