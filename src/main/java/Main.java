@@ -8,17 +8,26 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Main {
     // CRLF: Carriage Return, Line Feed
     private static final String CRLF = "\r\n";
+    private static String directory = "";
 
     public static void main(String[] args) {
         // You can use print statements as follows for debugging, they'll be visible
         // when running tests.
         System.out.println("Logs from your program will appear here!");
 
-        // Uncomment this block to pass the first stage
+
+        HashMap<String, String> arguments = new HashMap<>();
+        for (int i = 0; i < args.length - 1; i += 2) {
+        arguments.put(args[i].substring(2), args[i + 1]);
+        }
+        if (arguments.containsKey("directory")) {
+            directory = arguments.get("directory");
+        }
 
         ServerSocket serverSocket = null;
 
@@ -61,7 +70,7 @@ public class Main {
             } else if (arg[1].contains("/echo/")) { // echo
                 String echoString = arg[1].substring(6);
 
-                httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(echoString);
+                httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(echoString,"plain/text");
                 System.out.println("httpResponse: " + httpResponse);
             }
             // user-agent
@@ -79,11 +88,11 @@ public class Main {
                     }
                 }
 
-                httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(userAgentString);
+                httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(userAgentString,"plain/text");
                 System.out.println("httpResponse: " + httpResponse);
             } 
             else if(arg[1].contains("/files/")){
-                String filePath = arg[1].substring(7);
+                String filePath = directory + arg[1].substring(7);
 
                 File file = new File(filePath);
                 
@@ -100,7 +109,7 @@ public class Main {
                         System.err.println("IOException in file reading: " + e.getMessage());
                     }
 
-                    httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(fileContent.toString());
+                    httpResponse = "HTTP/1.1 200 OK\r\n" + bodyResponseString(fileContent.toString(),"application/octet-stream");
                 }
                 else{
                     httpResponse = "HTTP/1.1 404 BAD\r\n\r\n";
@@ -116,7 +125,7 @@ public class Main {
             System.err.println("IOException in client handler: " + e.getMessage());
         }
     }
-    private static String bodyResponseString(final String bodyData) {
-        return "Content-Type: text/plain" + CRLF + "Content-Length: " + bodyData.length() + CRLF + CRLF + bodyData + CRLF + CRLF;
+    private static String bodyResponseString(final String bodyData, final String contentType) {
+        return "Content-Type: "+ contentType + CRLF + "Content-Length: " + bodyData.length() + CRLF + CRLF + bodyData + CRLF + CRLF;
     }
 }
