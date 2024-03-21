@@ -84,10 +84,10 @@ public class Main {
                         writer.write(line);
                         writer.newLine();
                     }
-                    
+
                     writer.close();
                     fileWriter.close();
-                    httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
+                    httpResponse = "HTTP/1.1 201 OK\r\n\r\n";
                 } catch (Exception e) {
                     System.out.println("Exception in file writing: " + e.getMessage());
                     httpResponse = "HTTP/1.1 404 BAD\r\n\r\n";
