@@ -84,8 +84,9 @@ public class Main {
                         requestBody.append(line).append("\r\n");
                         System.out.println(line);
                     }
+                    
 
-                    String bodyContent = requestBody.toString();
+                    String bodyContent = inputStreamReader.read();;
 
                     writer.write(bodyContent);
                     writer.close();
