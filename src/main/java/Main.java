@@ -82,12 +82,10 @@ public class Main {
 
                     while ((line = inputStreamReader.readLine()) != null && !line.isEmpty()) {
                         requestBody.append(line).append("\r\n");
+                        System.out.println(line);
                     }
 
-                    // POST isteğinin gövdesi
-                    System.out.println("line: " + line);
-                    inputStreamReader.readLine();
-                    String bodyContent = inputStreamReader.readLine();
+                    String bodyContent = requestBody.toString().substring(requestBody.toString().indexOf("\r\n\r\n") + 4);
 
                     writer.write(bodyContent);
                     writer.close();
